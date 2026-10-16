@@ -1,10 +1,10 @@
 # cdk-lambda-web
 
 Unofficial L2 constructs for [AWS Lambda Web Functions](https://aws.amazon.com/about-aws/whats-new/2026/10/aws-lambda-web-functions/), built on the L1 `Cfn*` resources in aws-cdk-lib.
-Not affiliated with AWS. Not yet tested against a real deployment.
+Not affiliated with AWS. Deployed once to ap-northeast-1 (2026-10-16) with six functions.
 
 AWS Lambda Web Functions 用の自作 L2 コンストラクトです。aws-cdk-lib 2.273.0 にある L1（`CfnWebFunction` / `CfnWebFunctionRevision` / `CfnWebFunctionEndpoint`）を包んでいます。
-`cdk synth` とユニットテストまで確認済みで、実際のデプロイはまだしていません。
+ap-northeast-1 に 6 関数を実際にデプロイして動作を確認しました（2026-10-16）。
 
 ```ts
 import { WebFunction, WebFunctionCode, WebFunctionEndpointType, WebFunctionAuthType } from 'cdk-lambda-web';

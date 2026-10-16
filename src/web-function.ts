@@ -123,7 +123,7 @@ export class WebFunction extends Resource implements iam.IGrantable {
         telemetryConfig: logging ? { loggingConfig: logging } : undefined,
       },
     });
-    this.cfnRevision.addDependency(this.cfnFunction);
+    this.cfnRevision.addResourceDependency(this.cfnFunction);
     if (code.dependable) this.cfnRevision.node.addDependency(code.dependable);
     // The role (and its policies) must exist before the revision is created.
     this.cfnRevision.node.addDependency(this.role);

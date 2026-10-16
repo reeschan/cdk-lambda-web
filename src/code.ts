@@ -50,16 +50,18 @@ class AssetCode extends WebFunctionCode {
 
   bind(scope: Construct, functionName: string): WebFunctionCodeConfig {
     const bucket = this.options.bucket ?? WebFunctionCodeBucket.of(scope);
+    const prefix = `${functionName}/`;
     const upload = new s3deploy.BucketDeployment(scope, 'CodeUpload', {
       sources: [s3deploy.Source.asset(this.path)],
       destinationBucket: bucket,
-      destinationKeyPrefix: `${functionName}/`,
+      destinationKeyPrefix: prefix,
       extract: false,
       prune: false,
     });
     return {
       bucketName: bucket.bucketName,
-      key: Fn.select(0, upload.objectKeys),
+      // objectKeys does not include destinationKeyPrefix, so add it back.
+      key: Fn.join('', [prefix, Fn.select(0, upload.objectKeys)]),
       versionId: Fn.select(0, upload.objectVersionIds),
       dependable: upload,
     };

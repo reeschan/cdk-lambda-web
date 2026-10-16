@@ -142,3 +142,12 @@ test('validation', () => {
   );
   assert.throws(() => new WebFunction(newStack(), 'Fn', { code, endpoint: { regions: ['us-east-1'] } }), /only be set/);
 });
+
+test('fromAsset: S3 key includes the per-function prefix that BucketDeployment writes to', () => {
+  const stack = newStack();
+  new WebFunction(stack, 'Fn', { functionName: 'shop', code: WebFunctionCode.fromAsset(ASSET) });
+  const rev = Object.values(Template.fromStack(stack).findResources('AWS::Lambda::WebFunctionRevision'))[0] as any;
+  const key = rev.Properties.BuildConfig.CodeConfig.S3Object.Key;
+  assert.equal(key['Fn::Join'][0], '');
+  assert.equal(key['Fn::Join'][1][0], 'shop/');
+});
