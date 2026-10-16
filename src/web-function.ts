@@ -39,7 +39,7 @@ export interface WebFunctionProps {
   readonly maxConcurrencyPerEnvironment?: number;
   readonly applicationLogLevel?: lambda.ApplicationLogLevel;
   readonly systemLogLevel?: lambda.SystemLogLevel;
-  /** @default - service default (`/aws/lambda/web/<function>`) */
+  /** @default - created by the service as `/aws/lambda/web/<function>.local`, never expires */
   readonly logGroup?: logs.ILogGroup;
   /** Key used to encrypt the revision. @default - AWS owned key */
   readonly encryptionKey?: kms.IKey;

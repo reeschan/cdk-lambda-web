@@ -146,8 +146,16 @@ test('validation', () => {
 test('fromAsset: S3 key includes the per-function prefix that BucketDeployment writes to', () => {
   const stack = newStack();
   new WebFunction(stack, 'Fn', { functionName: 'shop', code: WebFunctionCode.fromAsset(ASSET) });
-  const rev = Object.values(Template.fromStack(stack).findResources('AWS::Lambda::WebFunctionRevision'))[0] as any;
-  const key = rev.Properties.BuildConfig.CodeConfig.S3Object.Key;
-  assert.equal(key['Fn::Join'][0], '');
-  assert.equal(key['Fn::Join'][1][0], 'shop/');
+  const t = Template.fromStack(stack);
+  const [[uploadId, upload]] = Object.entries(t.findResources('Custom::CDKBucketDeployment')) as [string, any][];
+  const rev = Object.values(t.findResources('AWS::Lambda::WebFunctionRevision'))[0] as any;
+  const s3Object = rev.Properties.BuildConfig.CodeConfig.S3Object;
+
+  // The zip is written under DestinationBucketKeyPrefix, but SourceObjectKeys omits it.
+  assert.equal(upload.Properties.DestinationBucketKeyPrefix, 'shop/');
+  assert.deepEqual(s3Object.Key, {
+    'Fn::Join': ['', ['shop/', { 'Fn::Select': [0, { 'Fn::GetAtt': [uploadId, 'SourceObjectKeys'] }] }]],
+  });
+  // Version ids are not keys, so they need no prefix.
+  assert.deepEqual(s3Object.VersionId, { 'Fn::Select': [0, { 'Fn::GetAtt': [uploadId, 'SourceObjectVersionIds'] }] });
 });
