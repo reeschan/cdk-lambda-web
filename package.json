@@ -1,0 +1,39 @@
+{
+  "name": "cdk-lambda-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "L2 constructs for AWS Lambda Web Functions (wraps the aws-cdk-lib L1 Cfn* resources)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "tsx --test test/*.test.ts",
+    "typecheck": "tsc -p . --noEmit",
+    "prepare": "tsc -p tsconfig.build.json"
+  },
+  "peerDependencies": {
+    "aws-cdk-lib": "^2.273.0",
+    "constructs": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "aws-cdk-lib": "^2.273.0",
+    "constructs": "^10.8.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reeschan/cdk-lambda-web.git"
+  },
+  "keywords": [
+    "aws-cdk",
+    "lambda",
+    "lambda-web-functions",
+    "construct"
+  ]
+}
